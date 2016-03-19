@@ -1,0 +1,96 @@
+<html>
+<head>
+	<title>Hikvision Сброс Пароля IP камеры</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script type="text/javascript">
+		function padLeft(str, l, c) { str = str + ""; return Array(l - str.length + 1).join(c || " ") + str }
+		function initialize()
+		{
+			document.getElementById("year").value = new Date().getYear() + 1900;
+			document.getElementById("month").value = padLeft(new Date().getMonth() + 1, 2, '0');
+			document.getElementById("day").value = padLeft(new Date().getDate(), 2, '0');
+
+			document.getElementById("serialNumber").onchange = GenerateSerialCode;
+			document.getElementById("year").onchange = GenerateSerialCode;
+			document.getElementById("month").onchange = GenerateSerialCode;
+			document.getElementById("day").onchange = GenerateSerialCode;
+		}
+		function GenerateSerialCode()
+		{
+			var serialNumber = document.getElementById("serialNumber").value;
+			var year = document.getElementById("year").value;
+			var month = document.getElementById("month").value;
+			var day = document.getElementById("day").value;
+			var plainText = serialNumber + year + month + day;
+
+			var magicNumber = 0;
+			for (var i = 0; i < plainText.length; i++)
+				magicNumber += (plainText.charCodeAt(i) * (i + 1)) ^ (i + 1);
+
+			magicNumber *= 1751873395;
+			magicNumber = magicNumber >>> 0; // convert to 32 bit integer
+
+			var magicWord = magicNumber + "";
+			var serialCode = "";
+			for (var i = 0; i < magicWord.length; i++)
+			{
+				var c = magicWord.charCodeAt(i);
+				if (c < 51)
+					serialCode += String.fromCharCode(c + 33);
+				else if (c < 53)
+					serialCode += String.fromCharCode(c + 62);
+				else if (c < 55)
+					serialCode += String.fromCharCode(c + 47);
+				else if (c < 57)
+					serialCode += String.fromCharCode(c + 66);
+				else
+					serialCode += String.fromCharCode(c);
+			}
+
+			document.getElementById("output").innerHTML = serialCode;
+		}
+		window.onload = initialize;
+	</script>
+	<style type="text/css">
+		body
+		{
+			width: 90%;
+		}
+		.description
+		{
+			margin: 20px 0px;
+		}
+		.label
+		{
+			margin: 10px 0px;
+			
+		}
+		.input
+		{
+			margin-bottom: 10px;
+		}
+		#output
+		{
+			font-weight: bold;
+			border: 1px solid black;
+			padding: 10px;
+			font-size: 2em;
+			max-width: 100%;
+		}
+	</style>
+</head>
+<body>
+	<div class="description">Это приложение для создания <b>кода сброса</b>, который можно использоваться для сброса забытого пароля Администратора камеры Hikvision.</div>
+	<div class="label">Введите весь серийный номер камеры, вводите с учетом заглавных букв, его можно найти в <a href="http://www.google.com/search?q=Hikvision%20SADP">Hikvision SADP</a> утилите.</div>
+	<div class="input"><input type="text" id="serialNumber" style="width: 100%;height:1.5em;font-size: 2em;" placeholder="Серийный номер камеры Hikvision" /></div>
+	<div class="label"><b>Важно:</b> Дату, которую надо ввести ниже, нужно брать из часов камеры. <b>Обычно это текущая дата!</b> Чтобы узнать какая дата в камере, несколько раз отключите и включите камеру, а потом обновите список камер в SADP и проверьте название столбца Start Time.</div>
+	<div class="label">Введите <b>4 цифры</b> год, который камера думает, что сейчас:</div>
+	<div class="input"><input type="text" id="year" style="width: 30%;height:1.5em;font-size: 2em;" /></div>
+	<div class="label">Введите <b>2 цифры</b> месяц, который камера думает, что сейчас:</div>
+	<div class="input"><input type="text" id="month" style="width: 30%;height:1.5em;font-size: 2em;" /></div>
+	<div class="label">Введите <b>2 цифры</b> день, который камера думает, что сейчас:</div>
+	<div class="input"><input type="text" id="day" style="width: 30%;height:1.5em;font-size: 2em;" /></div>
+	<div class="label">Ваш <b>код сброса пароля</b> появится тут, после нажатия.</div>
+	<div id="output"></div>
+	<div class="label">Код надо ввести в <a href="http://www.google.com/search?q=Hikvision%20SADP">Hikvision SADP</a> уилиту в <b>Serial code</b> поле (которое называется <b>Security Code</b> в последних версиях SADP). Новый пароль для admin будет 123456789abc.</div>
+</body>

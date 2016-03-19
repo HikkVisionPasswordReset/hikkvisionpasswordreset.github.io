@@ -1,0 +1,95 @@
+<html>
+<head>
+	<title>Hikvision Password Reset</title>
+	<script type="text/javascript">
+		function padLeft(str, l, c) { str = str + ""; return Array(l - str.length + 1).join(c || " ") + str }
+		function initialize()
+		{
+			document.getElementById("year").value = new Date().getYear() + 1900;
+			document.getElementById("month").value = padLeft(new Date().getMonth() + 1, 2, '0');
+			document.getElementById("day").value = padLeft(new Date().getDate(), 2, '0');
+
+			document.getElementById("serialNumber").onchange = GenerateSerialCode;
+			document.getElementById("year").onchange = GenerateSerialCode;
+			document.getElementById("month").onchange = GenerateSerialCode;
+			document.getElementById("day").onchange = GenerateSerialCode;
+		}
+		function GenerateSerialCode()
+		{
+			var serialNumber = document.getElementById("serialNumber").value;
+			var year = document.getElementById("year").value;
+			var month = document.getElementById("month").value;
+			var day = document.getElementById("day").value;
+			var plainText = serialNumber + year + month + day;
+
+			var magicNumber = 0;
+			for (var i = 0; i < plainText.length; i++)
+				magicNumber += (plainText.charCodeAt(i) * (i + 1)) ^ (i + 1);
+
+			magicNumber *= 1751873395;
+			magicNumber = magicNumber >>> 0; // convert to 32 bit integer
+
+			var magicWord = magicNumber + "";
+			var serialCode = "";
+			for (var i = 0; i < magicWord.length; i++)
+			{
+				var c = magicWord.charCodeAt(i);
+				if (c < 51)
+					serialCode += String.fromCharCode(c + 33);
+				else if (c < 53)
+					serialCode += String.fromCharCode(c + 62);
+				else if (c < 55)
+					serialCode += String.fromCharCode(c + 47);
+				else if (c < 57)
+					serialCode += String.fromCharCode(c + 66);
+				else
+					serialCode += String.fromCharCode(c);
+			}
+
+			document.getElementById("output").innerHTML = serialCode;
+		}
+		window.onload = initialize;
+	</script>
+	<style type="text/css">
+		body
+		{
+			width: 90%;
+		}
+		.description
+		{
+			margin: 20px 0px;
+		}
+		.label
+		{
+			margin: 10px 0px;
+			
+		}
+		.input
+		{
+			margin-bottom: 10px;
+		}
+		#output
+		{
+			font-weight: bold;
+			border: 1px solid black;
+			padding: 10px;
+			font-size: 2em;
+			max-width: 100%;
+		}
+	</style>
+</head>
+<body>
+	<div class="description">This tool will generate a <b>password reset code</b> which you may use to reset a forgotten admin password for a Hikvision camera.</div>
+	<div class="label">Enter your camera's complete CASE SENSITIVE serial number, as seen in the <a href="http://www.google.com/search?q=Hikvision%20SADP">Hikvision SADP</a> tool:</div>
+	<div class="input"><input type="text" id="serialNumber" style="width: 100%;height:1.5em;font-size: 2em;" placeholder="Hikvision Camera Serial Number" /></div>
+	<div class="label"><b>Important:</b> The date you enter below much match with the camera's clock. <b>Most likely it is not today's date!</b> To find out what date your camera thinks it is, power cycle your camera, give it time to boot up, and then refresh your camera list in SADP and check the Start Time column.</div>
+	<div class="label">Enter the <b>4 digit</b> year the camera thinks it is:</div>
+	<div class="input"><input type="text" id="year" style="width: 30%;height:1.5em;font-size: 2em;" /></div>
+	<div class="label">Enter the <b>2 digit</b> month the camera thinks it is:</div>
+	<div class="input"><input type="text" id="month" style="width: 30%;height:1.5em;font-size: 2em;" /></div>
+	<div class="label">Enter the <b>2 digit</b> day the camera thinks it is:</div>
+	<div class="input"><input type="text" id="day" style="width: 30%;height:1.5em;font-size: 2em;" /></div>
+	<div class="label">Your <b>password reset code</b> will appear below.</div>
+	<div id="output"></div>
+	<div class="label">The code must be entered into the <a href="http://www.google.com/search?q=Hikvision%20SADP">Hikvision SADP</a> tool in the <b>Serial code</b> box (called <b>Security Code</b> in later SADP versions). The camera will compare its internal date and time with the date and time you have entered above. The Serial Number and date much match perfectly or else the code will not work. New password will be 123456789abc.</div>
+</body>
