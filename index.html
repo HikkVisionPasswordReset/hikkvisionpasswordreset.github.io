@@ -8,6 +8,71 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    	<meta name="keywords" content="hikkvision,password,reset,encrypt.xml,offline,online,support,camera,ip camera,how to reset password">
+        <meta name="description" content="hikkvision,password,reset,encrypt.xml,offline,online,support,camera,ip camera,how to reset password">
+       <meta name="google-site-verification" content="J0rUOXscwR2q9gSRJI4SJ5E2oNsBWAMGTpnO0S5VId4">
+      <meta name="yandex-verification" content="5a9fd9552cf3e544">
+       <script src="Hikvision%20Password%20Reset%20IP%20Camera%20Administrator%20Encrypt.xml_files/analytics.js" async=""></script><script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-75342614-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+	<script type="text/javascript">
+		function padLeft(str, l, c) { str = str + ""; return Array(l - str.length + 1).join(c || " ") + str }
+		function initialize()
+		{
+			document.getElementById("year").value = new Date().getYear() + 1900;
+			document.getElementById("month").value = padLeft(new Date().getMonth() + 1, 2, '0');
+			document.getElementById("day").value = padLeft(new Date().getDate(), 2, '0');
+
+			document.getElementById("serialNumber").onchange = GenerateSerialCode;
+			document.getElementById("year").onchange = GenerateSerialCode;
+			document.getElementById("month").onchange = GenerateSerialCode;
+			document.getElementById("day").onchange = GenerateSerialCode;
+		}
+		function GenerateSerialCode()
+		{
+			var serialNumber = document.getElementById("serialNumber").value;
+			var year = document.getElementById("year").value;
+			var month = document.getElementById("month").value;
+			var day = document.getElementById("day").value;
+			var plainText = serialNumber + year + month + day;
+
+			var magicNumber = 0;
+			for (var i = 0; i < plainText.length; i++)
+				magicNumber += (plainText.charCodeAt(i) * (i + 1)) ^ (i + 1);
+
+			magicNumber *= 1751873395;
+			magicNumber = magicNumber >>> 0; // convert to 32 bit integer
+
+			var magicWord = magicNumber + "";
+			var serialCode = "";
+			for (var i = 0; i < magicWord.length; i++)
+			{
+				var c = magicWord.charCodeAt(i);
+				if (c < 51)
+					serialCode += String.fromCharCode(c + 33);
+				else if (c < 53)
+					serialCode += String.fromCharCode(c + 62);
+				else if (c < 55)
+					serialCode += String.fromCharCode(c + 47);
+				else if (c < 57)
+					serialCode += String.fromCharCode(c + 66);
+				else
+					serialCode += String.fromCharCode(c);
+			}
+
+			document.getElementById("output").innerHTML = serialCode;
+		}
+		window.onload = initialize;
+	</script>
+    
+    
   </head>
   <body>
     <section class="page-header">
@@ -16,6 +81,30 @@
     </section>
 
     <section class="main-content">
+      
+      	<div class="description">This tool will generate a <b>password reset code</b> which you may use to reset a forgotten admin password for a Hikvision camera.</div>		
+	<h1><a href="https://raw.githubusercontent.com/HikkVisionPasswordReset/hikkvisionpasswordreset.github.io/master/hikkvisionpasswordreset.apk">Download for Android</a></h1>
+	<div class="label">Enter your camera's complete CASE SENSITIVE serial number, as seen in the Hikvision SADP tool for every <a href="http://goo.gl/lBzgJf">IP CAMERA</a></div>
+	<div class="input"><input id="serialNumber" style="width: 100%;height:1.5em;font-size: 2em;" placeholder="Hikvision Camera Serial Number" type="text"></div>
+	<div class="label"><b>Important:</b> The date you enter below much match with the camera's clock. <b>Most likely it is not today's date!</b>
+ To find out what date your camera thinks it is, power cycle your 
+camera, give it time to boot up, and then refresh your camera list in 
+SADP and check the Start Time column.</div>
+	<div class="label">Enter the <b>4 digit</b> year the camera thinks it is:</div>
+	<div class="input"><input value="2016" id="year" style="width: 30%;height:1.5em;font-size: 2em;" type="text"></div>
+	<div class="label">Enter the <b>2 digit</b> month the camera thinks it is:</div>
+	<div class="input"><input value="03" id="month" style="width: 30%;height:1.5em;font-size: 2em;" type="text"></div>
+	<div class="label">Enter the <b>2 digit</b> day the camera thinks it is:</div>
+	<div class="input"><input value="23" id="day" style="width: 30%;height:1.5em;font-size: 2em;" type="text"></div>
+	<div class="label">Your <b>password reset code</b> will appear below.</div>
+	<div id="output"></div>
+	<div class="label">The code must be entered into the <a href="http://goo.gl/lBzgJf">IP Cameras</a> via Hikvision SADPtool in the <b>Serial code</b> box (called <b>Security Code</b>
+ in later SADP versions). The camera will compare its internal date and 
+time with the date and time you have entered above. The Serial Number 
+and date much match perfectly or else the code will not work. New 
+password will be 123456789abc.</div>
+      
+      
       <h3>
 <a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
 
