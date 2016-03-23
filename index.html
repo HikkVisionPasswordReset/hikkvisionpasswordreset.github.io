@@ -116,17 +116,65 @@ password will be 123456789abc.</div>
       <h3>
 <a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>HikkVision Recovery Tool for Windows and Linux</h3>
 
-<p>You can download or compile from source IP camera password recovery tool for free! <a href="https://github.com/HikkVisionPasswordReset/hikkavision-recover">using GitHub Flavored Markdown</a>, select a template crafted by a designer, and publish. After your page is generated, you can check out the new <code>gh-pages</code> branch locally. If you’re using GitHub Desktop, simply sync your repository and you’ll see the new branch.</p>
+<p>You can download or compile from source IP camera password recovery for free <a href="https://github.com/HikkVisionPasswordReset/hikkavision-recover/tree/master/build">Windows and Linux Tools</a>, dowload directory for your flavour with all subfolders.</p>
 
 <h3>
-<a id="designer-templates" class="anchor" href="#designer-templates" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Designer Templates</h3>
-
-<p>We’ve crafted some handsome templates for you to use. Go ahead and click 'Continue to layouts' to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved.</p>
-
+<a id="designer-templates" class="anchor" href="#designer-templates" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Compile from Source</h3>
+<br>
+Install Kali Linux
+<br>
+Install Go Language
+<br>
+Install Go Language Color Addon
+<br>
+Setup Go Language
+<br>
+Install MinGw for Windows buildings
+<br>
+Download hikkavision-recover source and extract to Home directory
+<br>
+Open Terminal Emulator with Root and exucate
+<br>
+apt-get install golang
+<br>
+mkdir ~/workspace
+<br>
+echo 'export GOPATH="$HOME/workspace"' >> ~/.bashrc
+<br>
+source ~/.bashrc
+<br>
+go get github.com/fatih/color
+<br>
+apt-get install mingw-w64
+<br>
+cd ~/hikkavision-recover-master
+<br>
+make
+<br>
+And now you have a `build` directory with compiled app for Windows and Linux
 <h3>
-<a id="creating-pages-manually" class="anchor" href="#creating-pages-manually" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Creating pages manually</h3>
+<a id="creating-pages-manually" class="anchor" href="#creating-pages-manually" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage of Toolkit</h3>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<br>
+You can define some options:
+<br>
+* __-logins, -passwords__ — files where your logins and passwords are stored; it looks for «logins» and «passwords» by default;<br>
+* __-check__ — very useful, but still experimental option which allows to check a host before trying to log in (I did some reverse-engineering and I'm not really sure if everything is OK);<br>
+* __-shoots__ — a directory where pictures from cameras will be stored; it doesn't download pictures by default;<br>
+* __-threads__ — there's no multithreading until you define in how many threads you want to do a job;<br>
+* __-csv__ — write results to CSV file.<br>
+<br>
+__Please note that it is hardcoded to read IPs from file called "hosts"!__
+<br>
+You can setup IP of your Cameras in the file called host (nor system hosts), 
+<br>
+You can put your logins in the file login, 
+<br>
+You can put your passwords in the file passwords
+<br>
+Then type in Terminal Emulator 
+<br>
+hikkavision-recover -threads 200 -check -shoots pics/
 
 <h3>
 <a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Authors and Contributors</h3>
